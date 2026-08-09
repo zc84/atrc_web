@@ -1,0 +1,36 @@
+export const copy = {
+  en: {
+    nav: [
+      { label: 'Career Pathways', route: 'pathways' },
+      { label: 'Advanced Technologies', route: 'technologies' },
+      { label: 'Opportunities Center', route: 'opportunities' },
+      { label: 'Talent Enablement', route: 'enablement' },
+      { label: 'Career Planner', route: 'planner' },
+    ],
+    quiz: 'Take the Career Test',
+    login: 'Login',
+    myAccount: 'My Account',
+    eyebrow: 'Your future starts here',
+    hero: <>Design your future.<br/><span>Build what’s next.</span></>,
+    intro: 'Discover the technologies, pathways and opportunities shaping the UAE — and find where your curiosity can take you.',
+    explorePath: 'Explore your path', discoverTech: 'Discover technologies', exploreFuture: 'EXPLORE YOUR FUTURE', orbitLabel: 'DISCOVER YOUR CAREER PATH',
+    announcement: 'Announcement', announcePrev: 'Previous announcement', announceNext: 'Next announcement',
+  },
+  ar: {
+    nav: [
+      { label: 'المسارات المهنية', route: 'pathways' },
+      { label: 'التقنيات المتقدمة', route: 'technologies' },
+      { label: 'مركز الفرص', route: 'opportunities' },
+      { label: 'تمكين المواهب', route: 'enablement' },
+      { label: 'مخطط المسار المهني', route: 'planner' },
+    ],
+    quiz: 'ابدأ اختبار المسار',
+    login: 'تسجيل الدخول',
+    myAccount: 'حسابي',
+    eyebrow: 'مستقبلك يبدأ من هنا',
+    hero: <>صمّم مستقبلك.<br/><span>وابنِ القادم.</span></>,
+    intro: 'اكتشف التقنيات والمسارات والفرص التي ترسم مستقبل دولة الإمارات، واعرف إلى أين يقودك فضولك.',
+    explorePath: 'استكشف مسارك', discoverTech: 'اكتشف التقنيات', exploreFuture: 'استكشف مستقبلك', orbitLabel: 'اكتشف مسارك المهني',
+    announcement: 'إعلان', announcePrev: 'الإعلان السابق', announceNext: 'الإعلان التالي',
+  },
+}

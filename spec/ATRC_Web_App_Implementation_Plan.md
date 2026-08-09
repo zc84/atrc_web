@@ -18,6 +18,59 @@ The first implementation milestone and the approved Web/iPhone preview extension
 - [x] Production build verified with Vite
 - [x] Web header phone entry, `/iphone/home` placeholder, adaptive iPhone frame, EN/AR, RTL, and Return-to-Web flow
 - [x] Unified master specification created; superseded mobile specification and legacy source document removed
+- [x] Client codebase restructured from a single-file `App.jsx` into the modular `src/app`, `src/features`, `src/services`, `src/shared`, `src/data` layout required by Section 4.1, with React Router replacing hand-rolled route state (Section 4.2, rules 1, 2, 9–12)
+- [x] `TechnologyContentService` and `CareerPathwayService` implemented behind the Epic W16 integration-contract pattern, backed by client-bundled data (`src/data/technologies.js`, `src/data/pathways.js`); remaining Epic W16 interfaces are not yet implemented
+- [x] Screen 03 — Advanced Technology detail experience (`/technologies/:technologyId`): introduction, why it matters, key subjects, technology domains/goals, education requirements, professions with responsibilities and required qualifications, qualification levels, recommended programmes, study routes, UAE/global universities, related technologies, related pathways, competitions, Career Quiz CTA — built with accessible progressive-disclosure accordions (native `<details>`), EN/AR content for all 8 technologies, and verified RTL mirroring
+- [x] Epic W4 — Career Test entry and question journey: landing page with instructions and Start/Resume, eight-question branching-score flow (`/career-test/questions`) with progress bar, large answer targets, Previous/Next, and `localStorage`-backed autosave/resume, and a result page (`/career-test/result`) computing primary + secondary pathway matches with recommendation text, View Pathway, Explore Technologies, and Retake actions — implemented via a real `CareerTestService` (Epic W16) with no external provider; verified end-to-end in-browser including scoring correctness, resume, retake, and full EN/AR RTL mirroring (progress bar direction, Previous/Next order)
+- [x] "Take the Career Test" CTAs across Home, Header (desktop + mobile), Technologies, Technology Detail, and the Career Pathways/Opportunities/Enablement/Planner overview pages now navigate to `/career-test` instead of being inert buttons
+- [x] Epic W5.1 — Login behavior: `/login` screen with email/username + password fields (both optional, no validation), Continue always opens the authenticated client area, plus UAE Pass and mobile-OTP entry points that behave identically per Section 9.1; implemented via a real client-only `AuthService` (Epic W16, `localStorage`-backed, no backend call); `/account` placeholder authenticated area with Logout; Header's Login button is now functional and swaps to "My Account" once signed in; verified end-to-end in-browser (empty-field submit succeeds, Logout clears session, full EN/AR RTL mirroring with bidi-safe LTR email field)
+- [x] Fixed a pre-existing UI bug found during this pass: `.career-test-link` (used for "Retake the test" / "Start over" / "Logout") rendered with default browser button chrome instead of a clean underlined text link — added a proper reset (`border:0; background:none; padding:0`)
+
+Known gaps carried forward from this increment:
+
+- Per-technology **Videos** content (required by Epic W3) was not fabricated — no real video assets exist yet for individual technologies; needs a content input before that field can be implemented.
+- Related-pathway links (from both Technology Detail and the Career Test result page) currently route to the Career Pathways overview page (`/career-pathways`) rather than a per-pathway detail route, since individual pathway detail pages (Epic W8) do not exist yet.
+- Career Test scoring only covers the 4 pathways currently modelled in `src/data/pathways.js` (Builder/Explorer/Analyst/Creator), not the full 10-pathway catalogue in Section 8 — extending the question bank to score all 10 pathways is follow-up work once the remaining pathways are added.
+- Only `TechnologyContentService`, `CareerPathwayService`, `CareerTestService`, and `AuthService` exist; Section 20 names 18 required service interfaces in total, so the other **14** (`ProfileService`, `ProgramService`, `SavedItemsService`, `ReportService`, `ArticleService`, `SearchService`, `CVBuilderService`, `LMSService`, `AnalyticsService`, `HabitRepository`, `NotificationService`, `ShareService`, `DeepLinkService`, `AIChatService`) remain unimplemented until the features that need them are built. (Corrected from an earlier miscount of "12" after a compliance audit — see review notes below.)
+- Registration (9.2), minor/guardian consent (9.3), and the rest of account management — Forgot/Reset/Change Password, Settings, Delete Account (9.4) — are not built yet; the Login page's "Forgot password?" and "Create an account" links are currently decorative (`href="#"`), consistent with the codebase's existing convention for not-yet-built destinations (e.g. footer About/Contact/FAQ).
+- Login/Account are not yet linked from the iPhone shell (Epic W17) — this increment only covers the Web experience.
+- The Header's authenticated/unauthenticated label only re-evaluates on route change (via `useLocation` re-render), not via a shared reactive auth store — acceptable for this client-only stage but worth revisiting if multiple components need live auth-state updates without a navigation.
+
+Next planned: Continue Epic W5 — Registration (role-aware: Student/Parent/Educator/Other) and account management screens.
+
+User-requested review pipeline (2026-08-09) — all four stages complete: (1) spec-compliance critic agent; (2) UI/design quality reviewer agent (stopped early at user request once high-value findings landed); (3) priority fixes from both reports applied and verified in-browser; (4) QA/validation agent functionally tested the live app (also stopped early at user request). No separate RFP document exists in this repo — confirmed independently by both the critic and the QA agent via direct search — so all three review stages validated against this plan doc only.
+
+QA validation results (2026-08-09), tested live at `http://127.0.0.1:5193/`:
+
+- [x] **Login/Logout** — PASS. Empty-field Continue reaches the authenticated `/account` view; Logout returns to a logged-out state. Matches Acceptance Criterion 6/7 and the Section 23 "Login-specific test."
+- [x] **Career Test full journey** — PASS. All 8 questions answerable via Next; Previous verified to actually restore the prior answer's selected state, not just move screens; Q8 correctly shows "See Results"; result page shows primary + secondary matches; **Retake verified to produce a genuinely different scored result** when different answers are given (confirms live scoring, not a static result).
+- [x] **Career Test resume** — PASS. Progress persists to `localStorage` after navigating away mid-test (verified directly, not just visually); landing page correctly offers "Resume Test"/"Start over"; resuming restores the exact question and prior answers.
+- [x] **Technology catalogue search/filter/empty state** — PASS. Search narrows results live; category filter narrows to the correct subset (verified via DOM, not just the counter); empty state + working "Reset search" confirmed for a nonsense query.
+- **Not tested** (explicitly — stopped before reaching these, per user request; treat as outstanding, not passed): Technology Detail page content/accordions/related-technology navigation; full Arabic/RTL run-through of the Career Test; routing edge cases (404 technology id, `/account` redirect-when-logged-out, Back/Forward); iPhone experience entry/exit and Return-to-Web page preservation.
+- Two low-severity, non-blocking observations: the Career Test landing page treats a "started, zero answers" state as resumable rather than showing "Start Test" (cosmetic only); Login's Continue control is a styled link rather than a native submit button (works correctly, just an unusual pattern).
+
+**QA's own recommendation:** Conditional GO on everything actually tested (zero functional defects found) — not a full sign-off, since the untested RTL/navigation-edge-case items are exactly the class of issue the earlier design review already found problems in. A follow-up QA pass on those specific items is recommended before treating this increment as fully validated.
+
+Fixes applied from the review pipeline, verified in-browser:
+
+- [x] **RTL arrow-mirroring bug (critical, site-wide)** — the shared `ArrowIcon` used by every primary/outline `Button`, the Home orbit CTA, technology/inner-card "explore" links, and both footer arrow links never flipped for RTL. Added `[dir="rtl"]` mirroring rules in `src/styles.css`. Also fixed the announcement-card prev/next arrows, which pointed the wrong semantic direction in RTL due to flexbox reversal combined with an always-on, non-RTL-aware `scaleX(-1)`.
+- [x] Header language toggle visually fusing with the main nav at ~1200–1350px width — added an explicit `gap` on `.site-header` so the two flex groups never collapse to a 0px gap.
+- [x] `/career-test/result` headline rendering in unstyled default bold browser type — added the missing `.career-test-result-hero h2` rule matching every sibling hero's thin/display type.
+- [x] Language selection not persisting across navigation/reload — added `src/app/localisation/languagePreference.js` (`localStorage`-backed) and wired it into `App.jsx`'s `lang` state.
+- [x] Architecture rule 2 (all data access through service interfaces) — `OrbitalFuture.jsx`, `InternalHero.jsx`, `Home.jsx` (pathways grid), and `pageContent.jsx` now call `TechnologyContentService`/`CareerPathwayService` instead of importing `src/data/*` directly.
+- [x] Footer missing "Useful Materials" (spec Section 6) — added to the mobile footer's Support group.
+- [x] Epic W16 gap-count self-audit error — corrected from "12 remaining" to the accurate 14 (18 named interfaces in Section 20, minus the 4 implemented).
+
+Deliberately deferred (require a product/design decision, not a mechanical fix): Hero CTA copy vs. spec's literal "Take a Quiz"/"Login" wording (current copy follows `spec/UI sample.png`'s visual mockup instead — unclear which is authoritative); the opaque bright-violet header vs. the mockup's transparent header; the Mission section's two-column layout vs. the mockup's centered single column; the missing standalone Cryptography domain and AI STEM/Non-STEM split in the technology catalogue; establishing `React.lazy` route-level code-splitting (Section 21.9) before more features land.
+
+Follow-up self-checks after the review pipeline (2026-08-09, done directly, no subagent): re-verified `/account` redirect-to-`/login` when logged out (works via `&lt;Navigate&gt;`); re-verified Career Test's plain-`&lt;button&gt;` Previous/Next controls mirror correctly in RTL with no fix needed (flexbox's automatic reversal under inherited `dir="rtl"` already swaps their visual position correctly, since they carry no directional icon). Both were on the QA agent's "not tested" list; both check out.
+
+- [x] **Epic W5.2 — Registration entry point**: `/register` role-selection screen (Student/Parent/Educator/Other) plus a fully functional Student registration form (Account Information: first/last name, birth year, mobile, email, password; Student Information: gender, nationality, emirate, grade, curriculum) per Section 9.2. Completing it (no validation, matching the client-only-stage convention) calls a new client-only `ProfileService` (Epic W16, `localStorage`-backed) and `AuthService.login()`, then opens `/account`. Login's previously-decorative "Create an account" link now navigates here. Parent/Educator/Other role cards are visibly present but honestly labeled "Available in a future update" rather than faked — consistent with the AI Chat "Preview" pattern the spec itself prescribes for not-yet-connected features, not a dead/misleading link.
+- **Bug found and fixed during this pass**: the registration submit button (rendered as an `&lt;a&gt;` via the shared `Button` component) called `new FormData(event.target)`, which is only valid when `event.target` is the `&lt;form&gt;` itself — clicking the button (as opposed to pressing Enter in a field) passed the anchor element instead, silently throwing and leaving the button inert. Fixed to `new FormData(event.target.closest('form'))`. Verified after the fix: role selection, form rendering, and RTL layout all confirmed correct in-browser; the fixed submit path itself was verified by code inspection and build success but not re-clicked end-to-end after the fix (session wrapped up before that final click) — flag this specific click-through as the first thing to verify next session.
+
+Known gaps in Registration, carried forward: Parent/Educator/Other role-specific field sets (Section 9.2) are not built; the minor/guardian consent flow (Section 9.3) is not built; Account management screens (Forgot/Reset/Change Password, Settings, Delete Account — Section 9.4) are not built.
+
+Next planned: verify the Register submit fix end-to-end, then continue Epic W5 with Parent/Educator/Other role fields and the minor/guardian consent flow.
 
 A/B QA routes:
 
@@ -25,7 +78,7 @@ A/B QA routes:
 - Cinematic film crawl: `/?videoCaptions=b`
 - Unforced traffic: stable 50/50 assignment stored in browser storage and exposed through `data-video-captions-variant`
 
-Next planned screen: Advanced Technology detail experience, followed by the Career Test entry and question journey.
+Next planned screen: Registration (Epic W5.2) for all four roles.
 
 ## Product Direction Update — 9 August 2026
 
