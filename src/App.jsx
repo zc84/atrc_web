@@ -1,39 +1,101 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowIcon, SearchIcon, TechGlyph } from './icons.jsx'
-import { pathways, stats, technologies } from './data.js'
+import { ArrowIcon, SearchIcon, SoundIcon, StatGlyph, TechGlyph } from './icons.jsx'
+import { announcements, pathways, stats, technologies } from './data.js'
 
 const copy = {
   en: {
-    nav: ['Career Pathways', 'Advanced Technologies', 'Talent Enablement', 'Career Planner'],
+    nav: ['Career Pathways', 'Advanced Technologies', 'Opportunities Center', 'Talent Enablement', 'Career Planner'],
     quiz: 'Take the Career Test',
     login: 'Login',
     eyebrow: 'Your future starts here',
     hero: <>Design your future.<br/><span>Build what’s next.</span></>,
     intro: 'Discover the technologies, pathways and opportunities shaping the UAE — and find where your curiosity can take you.',
-    explorePath: 'Explore your path', discoverTech: 'Discover technologies', exploreFuture: 'EXPLORE YOUR FUTURE', orbitLabel: '10 pathways • endless possibilities',
+    explorePath: 'Explore your path', discoverTech: 'Discover technologies', exploreFuture: 'EXPLORE YOUR FUTURE', orbitLabel: 'DISCOVER YOUR CAREER PATH',
+    announcement: 'Announcement', announcePrev: 'Previous announcement', announceNext: 'Next announcement',
   },
   ar: {
-    nav: ['المسارات المهنية', 'التقنيات المتقدمة', 'تمكين المواهب', 'مخطط المسار المهني'],
+    nav: ['المسارات المهنية', 'التقنيات المتقدمة', 'مركز الفرص', 'تمكين المواهب', 'مخطط المسار المهني'],
     quiz: 'ابدأ اختبار المسار',
     login: 'تسجيل الدخول',
     eyebrow: 'مستقبلك يبدأ من هنا',
     hero: <>صمّم مستقبلك.<br/><span>وابنِ القادم.</span></>,
     intro: 'اكتشف التقنيات والمسارات والفرص التي ترسم مستقبل دولة الإمارات، واعرف إلى أين يقودك فضولك.',
-    explorePath: 'استكشف مسارك', discoverTech: 'اكتشف التقنيات', exploreFuture: 'استكشف مستقبلك', orbitLabel: '١٠ مسارات • إمكانات بلا حدود',
+    explorePath: 'استكشف مسارك', discoverTech: 'اكتشف التقنيات', exploreFuture: 'استكشف مستقبلك', orbitLabel: 'اكتشف مسارك المهني',
+    announcement: 'إعلان', announcePrev: 'الإعلان السابق', announceNext: 'الإعلان التالي',
   },
 }
+
+const filmCaptions = {
+  en: [
+    { eyebrow: 'Inside the intelligence age', heading: <>Where ambition<br/>becomes impact.</> },
+    { eyebrow: 'Innovation for the intelligence age', heading: <>Built in Abu Dhabi.<br/>Built for the world.</> },
+    { eyebrow: 'A global tech R&D platform', heading: <>Research becomes<br/>real-world reach.</> },
+    { eyebrow: 'Talent, unlocked', heading: <>Curiosity is where<br/>every career starts.</> },
+    { eyebrow: 'Shaping the knowledge economy', heading: <>Ideas move fast<br/>when talent leads.</> },
+  ],
+  ar: [
+    { eyebrow: 'داخل عصر الذكاء', heading: <>حيث يتحوّل الطموح<br/>إلى أثر.</> },
+    { eyebrow: 'الابتكار لعصر الذكاء', heading: <>وُلد في أبوظبي.<br/>صُنع للعالم.</> },
+    { eyebrow: 'منصة عالمية للبحث والتطوير', heading: <>البحث يتحوّل إلى<br/>تأثير حقيقي.</> },
+    { eyebrow: 'المواهب بلا حدود', heading: <>الفضول هو حيث<br/>تبدأ كل مسيرة.</> },
+    { eyebrow: 'نبني اقتصاد المعرفة', heading: <>الأفكار تتسارع<br/>حين تقود المواهب.</> },
+  ],
+}
+
+const logoDots = [
+  [82.2, 33.2, 7.1], [83.6, 54.2, 9], [76.9, 69.2, 2.8], [33.5, 65.7, 2.6], [42.9, 68.4, 3.7], [54.2, 66.2, 4.6], [63.5, 57.3, 6],
+  [33, 27.6, 2.6], [25.9, 34.5, 3.7], [22.3, 45.2, 4.6], [25.3, 57.7, 6], [66.5, 46.7, 2.7], [64.4, 37.1, 3.8], [56.9, 28.4, 4.6],
+  [44.2, 24.6, 5.9], [48.8, 6.8, 2.9], [60.1, 9.8, 4.2], [72.6, 18, 5.8], [8.1, 62.6, 2.8], [4.7, 51.1, 4.1], [5.7, 36.2, 5.7],
+  [14.2, 20.4, 6.9], [31.8, 8.8, 8.7], [68.7, 77.7, 4], [54.9, 84.3, 5.8], [36.7, 85.1, 7.1], [17.8, 75.7, 8.9],
+]
 
 function Logo() {
   return (
     <a className="brand" href="/" aria-label="ATRC Talent home">
-      <span className="brand-orbit" aria-hidden="true">{Array.from({length: 12}, (_, i) => <i key={i} />)}</span>
+      <svg className="brand-orbit" viewBox="0 0 93 93" aria-hidden="true">
+        {logoDots.map(([cx, cy, r], i) => <circle key={i} cx={cx} cy={cy} r={r} />)}
+      </svg>
       <span className="brand-copy"><b>ADVANCED<br/>TECHNOLOGY</b><small>RESEARCH COUNCIL</small></span>
     </a>
   )
 }
 
+function useReveal(threshold = 0.25) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const node = ref.current
+    if (!node) return undefined
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setVisible(true); observer.disconnect() }
+    }, { threshold })
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [threshold])
+  return [ref, visible]
+}
+
 function Button({ children, variant = 'primary', href = '#', onClick, className = '' }) {
   return <a className={`button button--${variant} ${className}`} href={href} onClick={onClick}><span>{children}</span><i><ArrowIcon diagonal={variant === 'text'} /></i></a>
+}
+
+function AnnouncementCard({ lang, t }) {
+  const [index, setIndex] = useState(0)
+  const current = announcements[index]
+  const step = (delta) => setIndex((index + delta + announcements.length) % announcements.length)
+  return (
+    <div className="announce-card">
+      <div className="announce-body">
+        <span className="eyebrow"><i/>{t.announcement}</span>
+        <p>{lang === 'ar' ? current.arabicText : current.text}</p>
+      </div>
+      <div className="announce-media" style={{'--tone': current.color}} aria-hidden="true"><TechGlyph type={current.icon}/></div>
+      <div className="announce-nav">
+        <button onClick={() => step(-1)} aria-label={t.announcePrev}><ArrowIcon/></button>
+        <button className="is-active" onClick={() => step(1)} aria-label={t.announceNext}><ArrowIcon/></button>
+      </div>
+    </div>
+  )
 }
 
 function Header({ lang, setLang, route, setRoute }) {
@@ -58,13 +120,17 @@ function Header({ lang, setLang, route, setRoute }) {
 }
 
 function OrbitalFuture({ onOpen, t }) {
-  const nodes = technologies.slice(0, 6)
+  const nodes = technologies
   return (
     <div className="future-orbit" aria-label="Explore future technologies">
       <div className="orbit-ring orbit-ring--outer"/><div className="orbit-ring orbit-ring--inner"/>
-      <button className="orbit-core" onClick={onOpen}><span>{t.exploreFuture}</span><i><ArrowIcon /></i></button>
-      {nodes.map((tech, index) => <div className="orbit-node" style={{'--index': index, '--tone': tech.color}} key={tech.id}><TechGlyph type={tech.icon}/></div>)}
-      <span className="orbit-label">{t.orbitLabel}</span>
+      {Array.from({length: nodes.length}, (_, index) => <span className="orbit-tick" style={{'--index': index, '--count': nodes.length}} key={index}/>)}
+      <svg className="orbit-curve" viewBox="0 0 200 200" aria-hidden="true">
+        <path id="orbitCurvePath" d="M71.7,128.3 A40,40 0 1 1 128.3,128.3" fill="none"/>
+        <text textAnchor="middle"><textPath href="#orbitCurvePath" startOffset="50%">{t.orbitLabel}</textPath></text>
+      </svg>
+      <button className="orbit-core" onClick={onOpen}><i><ArrowIcon /></i></button>
+      {nodes.map((tech, index) => <div className="orbit-node" style={{'--index': index, '--count': nodes.length, '--tone': tech.color}} key={tech.id}><TechGlyph type={tech.icon}/></div>)}
     </div>
   )
 }
@@ -75,6 +141,8 @@ function VideoFeature({ lang }) {
   const [shouldLoad, setShouldLoad] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(true)
+  const [captionIndex, setCaptionIndex] = useState(0)
+  const captions = filmCaptions[lang]
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
@@ -84,6 +152,13 @@ function VideoFeature({ lang }) {
     if (frameRef.current) observer.observe(frameRef.current)
     return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+    if (!shouldLoad) return undefined
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    const id = setInterval(() => setCaptionIndex(index => (index + 1) % captions.length), 5500)
+    return () => clearInterval(id)
+  }, [shouldLoad, captions.length])
 
   const togglePlayback = async () => {
     if (!videoRef.current) return
@@ -101,6 +176,8 @@ function VideoFeature({ lang }) {
     videoRef.current?.play().catch(() => setPlaying(false))
   }
 
+  const caption = captions[captionIndex % captions.length]
+
   return (
     <section className="video-feature section-shell" ref={frameRef} aria-label={lang === 'ar' ? 'فيلم مجلس أبحاث التكنولوجيا المتطورة' : 'ATRC film'}>
       <div className="video-frame">
@@ -108,16 +185,15 @@ function VideoFeature({ lang }) {
           <source src="https://prod-atrc-backend-webfiles-bmg3gcf9fwf2f9es.a02.azurefd.net/static/atrc.mp4" type="video/mp4" />
         </video>}
         <div className="video-vignette" />
-        <div className="video-caption">
-          <span className="eyebrow"><i/>{lang === 'ar' ? 'داخل عصر الذكاء' : 'Inside the intelligence age'}</span>
-          <h2>{lang === 'ar' ? <>حيث يتحوّل الطموح<br/>إلى أثر.</> : <>Where ambition<br/>becomes impact.</>}</h2>
+        <div className="video-caption" key={captionIndex}>
+          <span className="eyebrow"><i/>{caption.eyebrow}</span>
+          <h2>{caption.heading}</h2>
           <a href="https://www.atrc.gov.ae/" target="_blank" rel="noreferrer">{lang === 'ar' ? 'اكتشف منظومة ATRC' : 'Discover the ATRC ecosystem'} <ArrowIcon diagonal /></a>
         </div>
         <div className="video-controls">
           <button onClick={togglePlayback} disabled={!shouldLoad} aria-label={playing ? 'Pause film' : 'Play film'}>{playing ? 'Ⅱ' : '▶'}</button>
-          <button onClick={toggleSound} disabled={!shouldLoad} aria-label={muted ? 'Unmute film' : 'Mute film'}>{muted ? 'SOUND OFF' : 'SOUND ON'}</button>
+          <button onClick={toggleSound} disabled={!shouldLoad} aria-label={muted ? 'Unmute film' : 'Mute film'}><SoundIcon muted={muted}/></button>
         </div>
-        <span className="video-index">FILM 01 / ATRC</span>
       </div>
     </section>
   )
@@ -125,6 +201,7 @@ function VideoFeature({ lang }) {
 
 function Home({ setRoute, lang }) {
   const t = copy[lang]
+  const [missionRef, missionVisible] = useReveal()
   return (
     <main id="home">
       <section className="hero-section section-shell">
@@ -134,6 +211,7 @@ function Home({ setRoute, lang }) {
           <h1>{t.hero}</h1>
           <p>{t.intro}</p>
           <div className="hero-ctas"><Button href="#pathways">{t.explorePath}</Button><Button variant="text" href="/technologies" onClick={(e) => {e.preventDefault(); setRoute('technologies'); window.scrollTo(0,0)}}>{t.discoverTech}</Button></div>
+          <AnnouncementCard lang={lang} t={t} />
         </div>
         <OrbitalFuture t={t} onOpen={() => {setRoute('technologies'); window.scrollTo(0,0)}} />
         <div className="hero-foot"><span>SCROLL TO DISCOVER</span><i/></div>
@@ -142,14 +220,17 @@ function Home({ setRoute, lang }) {
       <section className="signal-section section-shell">
         <div className="section-intro"><span className="eyebrow"><i/>Signals of the future</span><h2>The future is already<br/><span>in motion.</span></h2></div>
         <div className="stats-grid">
-          {stats.map((stat, index) => <article className="stat" key={stat.value}><span>0{index + 1}</span><strong>{stat.value}</strong><p>{stat.label}</p><small>{stat.source}</small></article>)}
+          {stats.map((stat) => <article className="stat" key={stat.value}><StatGlyph type={stat.icon}/><strong>{stat.value}</strong><p>{stat.label}</p><small>{stat.source}</small></article>)}
         </div>
       </section>
 
       <VideoFeature lang={lang} />
 
-      <section className="mission-section section-shell">
-        <div className="mission-visual" aria-hidden="true"><span/><i/><b>UAE<br/>2071</b></div>
+      <section className={`mission-section section-shell reveal-section ${missionVisible ? 'is-visible' : ''}`} ref={missionRef}>
+        <div className="mission-visual" aria-hidden="true">
+          <span/><i/>
+          <svg className="mission-mark" viewBox="0 0 93 93">{logoDots.map(([cx, cy, r], index) => <circle key={index} cx={cx} cy={cy} r={r}/>)}</svg>
+        </div>
         <div className="mission-copy">
           <span className="eyebrow"><i/>Our mission</span>
           <h2>Empowering the next generation of innovators to <span>shape the future world.</span></h2>

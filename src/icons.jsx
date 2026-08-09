@@ -23,3 +23,21 @@ export function TechGlyph({ type }) {
   }
   return <svg className="tech-glyph" viewBox="0 0 64 64" aria-hidden="true">{paths[type]}</svg>
 }
+
+export function SoundIcon({ muted }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9v6h3.5L12 19V5L7.5 9H4Z"/>
+      {muted ? <path d="m16.5 9.5 5 5m0-5-5 5"/> : <path d="M16.3 8.8a5 5 0 0 1 0 6.4M19 6a9 9 0 0 1 0 12"/>}
+    </svg>
+  )
+}
+
+export function StatGlyph({ type }) {
+  const paths = {
+    data: <><rect x="8" y="28" width="9" height="20" rx="2"/><rect x="23" y="16" width="9" height="32" rx="2"/><rect x="38" y="6" width="9" height="42" rx="2"/></>,
+    speed: <><path d="M8 40a24 24 0 1 1 48 0"/><path d="M32 40 45 22"/><circle cx="32" cy="40" r="3"/></>,
+    bolt: <path d="M36 5 15 33h13l-4 26 23-32H34l2-22Z"/>,
+  }
+  return <svg className="stat-glyph" viewBox="0 0 54 54" aria-hidden="true">{paths[type]}</svg>
+}
