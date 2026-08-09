@@ -10,6 +10,15 @@ export function SearchIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.3 15.3 5 5M10.5 7.5v6M7.5 10.5h6"/></svg>
 }
 
+export function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/>
+      <path d="M10 5h4M10.5 18.5h3"/>
+    </svg>
+  )
+}
+
 export function TechGlyph({ type }) {
   const paths = {
     neural: <><path d="M32 16v32M16 32h32M21 21l22 22M43 21 21 43"/><circle cx="32" cy="16" r="4"/><circle cx="16" cy="32" r="4"/><circle cx="48" cy="32" r="4"/><circle cx="32" cy="48" r="4"/><circle cx="32" cy="32" r="6"/><path d="M32 26v-6M26 32h-6M38 32h6M32 38v6"/></>,
@@ -22,4 +31,22 @@ export function TechGlyph({ type }) {
     beam: <><circle cx="15" cy="32" r="8"/><circle cx="15" cy="32" r="3"/><path d="m23 27 31-13M23 32h35M23 37l31 13"/><path d="M42 23h5M42 41h5"/></>,
   }
   return <svg className="tech-glyph" viewBox="0 0 64 64" aria-hidden="true">{paths[type]}</svg>
+}
+
+export function SoundIcon({ muted }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9v6h3.5L12 19V5L7.5 9H4Z"/>
+      {muted ? <path d="m16.5 9.5 5 5m0-5-5 5"/> : <path d="M16.3 8.8a5 5 0 0 1 0 6.4M19 6a9 9 0 0 1 0 12"/>}
+    </svg>
+  )
+}
+
+export function StatGlyph({ type }) {
+  const paths = {
+    data: <><rect x="8" y="28" width="9" height="20" rx="2"/><rect x="23" y="16" width="9" height="32" rx="2"/><rect x="38" y="6" width="9" height="42" rx="2"/></>,
+    speed: <><path d="M8 40a24 24 0 1 1 48 0"/><path d="M32 40 45 22"/><circle cx="32" cy="40" r="3"/></>,
+    bolt: <path d="M36 5 15 33h13l-4 26 23-32H34l2-22Z"/>,
+  }
+  return <svg className="stat-glyph" viewBox="0 0 54 54" aria-hidden="true">{paths[type]}</svg>
 }
