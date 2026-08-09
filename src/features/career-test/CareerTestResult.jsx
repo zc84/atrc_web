@@ -4,6 +4,7 @@ import { careerTestCopy } from '../../app/localisation/careerTestCopy.jsx'
 import { ROUTE_PATHS } from '../../app/routing/routes.js'
 import { getResultPathway, getSavedResult, resetTest, startOrResumeTest } from '../../services/CareerTestService.js'
 import { Button } from '../../shared/ui/Button.jsx'
+import { PathwayGlyph } from '../../shared/ui/icons.jsx'
 
 export function CareerTestResult({ lang }) {
   const t = careerTestCopy[lang]
@@ -38,7 +39,7 @@ export function CareerTestResult({ lang }) {
       </section>
 
       <article className="career-test-result-card" style={{'--tone': primary.color}}>
-        <b>{primary.mark}</b>
+        <b><PathwayGlyph type={primary.id}/></b>
         <span>{lang === 'ar' ? primary.arabicRole : primary.role}</span>
         <h3>{lang === 'ar' ? primary.arabicTitle : primary.title}</h3>
         <p>{primary.resultSummary[lang]}</p>

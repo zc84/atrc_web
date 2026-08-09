@@ -4,7 +4,7 @@ import { uiCopy } from '../../app/localisation/uiCopy.jsx'
 import { ROUTE_PATHS } from '../../app/routing/routes.js'
 import { listTechnologies } from '../../services/TechnologyContentService.js'
 import { Button } from '../../shared/ui/Button.jsx'
-import { SearchIcon } from '../../shared/ui/icons.jsx'
+import { SearchIcon, TechGlyph } from '../../shared/ui/icons.jsx'
 import { TechnologyCard } from './TechnologyCard.jsx'
 
 export function Technologies({ lang }) {
@@ -24,7 +24,7 @@ export function Technologies({ lang }) {
         <div className="catalogue-kicker"><span>01 — 08</span><span>{ui.techKicker}</span></div>
         <h1>{ui.techTitle}</h1>
         <p>{ui.techLead}</p>
-        <div className="catalogue-art" aria-hidden="true"><i/><i/><i/><span>∞</span></div>
+        <div className="catalogue-art" aria-hidden="true"><i/><i/><i/><span><TechGlyph type="orbit"/></span></div>
       </section>
       <section className="catalogue-controls section-shell">
         <label className="search-box"><SearchIcon/><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={ui.techSearch}/><span>{visible.length.toString().padStart(2, '0')} {ui.results}</span></label>

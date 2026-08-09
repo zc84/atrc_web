@@ -5,6 +5,7 @@ import { getStoredLanguage, storeLanguage } from './app/localisation/languagePre
 import { ROUTE_PATHS } from './app/routing/routes.js'
 import { Header } from './shared/layout/Header.jsx'
 import { Footer } from './shared/layout/Footer.jsx'
+import { AIWidget } from './shared/ui/AIWidget.jsx'
 import { Home } from './features/home/Home.jsx'
 import { Technologies } from './features/technologies/Technologies.jsx'
 import { TechnologyDetail } from './features/technologies/TechnologyDetail.jsx'
@@ -28,7 +29,7 @@ function routeKeyFromPathname(pathname) {
   if (pathname === ROUTE_PATHS.login) return 'login'
   if (pathname === ROUTE_PATHS.register) return 'register'
   if (pathname === ROUTE_PATHS.account) return 'account'
-  if (pathname === ROUTE_PATHS.iphoneHome) return 'iphoneHome'
+  if (pathname.startsWith('/iphone')) return 'iphoneHome'
   return 'home'
 }
 
@@ -46,6 +47,7 @@ function WebLayout({ lang, setLang, children }) {
     <div className="app">
       <Header lang={lang} setLang={setLang} />
       {children}
+      <AIWidget lang={lang} />
       <Footer lang={lang} />
     </div>
   )
@@ -68,7 +70,7 @@ export default function App() {
     <>
       <DocumentTitle lang={lang} />
       <Routes>
-        <Route path={ROUTE_PATHS.iphoneHome} element={<div className="app app--iphone"><IPhoneHome lang={lang} setLang={setLang} /></div>} />
+        <Route path={ROUTE_PATHS.iphone} element={<div className="app app--iphone"><IPhoneHome lang={lang} setLang={setLang} /></div>} />
         <Route path={ROUTE_PATHS.home} element={<WebLayout lang={lang} setLang={setLang}><Home lang={lang} /></WebLayout>} />
         <Route path={ROUTE_PATHS.technologies} element={<WebLayout lang={lang} setLang={setLang}><Technologies lang={lang} /></WebLayout>} />
         <Route path={ROUTE_PATHS.technologyDetail} element={<WebLayout lang={lang} setLang={setLang}><TechnologyDetail lang={lang} /></WebLayout>} />

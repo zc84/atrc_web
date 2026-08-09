@@ -61,7 +61,7 @@ export function Register({ lang }) {
             </article>
           ))}
         </div>
-        <p className="auth-footer-note" style={{ marginTop: 40 }}>{t.alreadyHaveAccount}<a href="#" onClick={(e) => { e.preventDefault(); navigate(ROUTE_PATHS.login) }}>{t.login}</a></p>
+        <p className="auth-footer-note" style={{ marginTop: 40 }}>{t.alreadyHaveAccount}<a href={ROUTE_PATHS.login} onClick={(e) => { e.preventDefault(); navigate(ROUTE_PATHS.login) }}>{t.login}</a></p>
       </main>
     )
   }
@@ -120,7 +120,7 @@ export function Register({ lang }) {
         <label className="register-consent"><input type="checkbox" name="consent" />{t.consent}</label>
 
         <Button className="auth-submit" onClick={submit}>{t.createAccount}</Button>
-        <a className="register-back" href="#" onClick={(e) => { e.preventDefault(); setRole(null) }}>{t.backToRoles}</a>
+        <a className="register-back" href={ROUTE_PATHS.register} onClick={(e) => { e.preventDefault(); setRole(null) }}>{t.backToRoles}</a>
       </form>
     </main>
   )

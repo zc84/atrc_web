@@ -36,7 +36,7 @@ export function Login({ lang }) {
           <div className="auth-field">
             <label htmlFor="auth-password">{t.passwordLabel}</label>
             <input id="auth-password" type="password" dir="ltr" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t.passwordPlaceholder} />
-            <a className="auth-forgot" href="#">{t.forgotPassword}</a>
+            <button type="button" className="auth-forgot" onClick={() => continueWith('password recovery')}>{t.forgotPassword}</button>
           </div>
           <Button className="auth-submit" onClick={submit}>{t.continue}</Button>
         </form>
@@ -47,7 +47,7 @@ export function Login({ lang }) {
           <button onClick={() => continueWith('mobile OTP')}>{t.otp}</button>
         </div>
 
-        <p className="auth-footer-note">{t.noAccount}<a href="#" onClick={(e) => { e.preventDefault(); navigate(ROUTE_PATHS.register) }}>{t.register}</a></p>
+        <p className="auth-footer-note">{t.noAccount}<a href={ROUTE_PATHS.register} onClick={(e) => { e.preventDefault(); navigate(ROUTE_PATHS.register) }}>{t.register}</a></p>
       </div>
     </main>
   )

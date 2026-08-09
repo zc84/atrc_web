@@ -24,7 +24,7 @@ export function InternalPage({ type, lang }) {
           <span className="eyebrow"><i/>{page.eyebrow[lang]}</span>
           <h2>{page.focus[lang]}</h2>
           <p>{ui.innerIntro}</p>
-          <Button variant="outline">{ui.startExploring}</Button>
+          <Button variant="outline" to={ROUTE_PATHS.careerTest}>{ui.startExploring}</Button>
         </div>
       </section>
 
@@ -41,7 +41,7 @@ export function InternalPage({ type, lang }) {
                 <h3>{tile.title[lang]}</h3>
                 <p>{tile.text[lang]}</p>
               </div>
-              <a href="#"><span>{ui.explore}</span><ArrowIcon diagonal/></a>
+              <a href={ROUTE_PATHS.careerTest}><span>{ui.explore}</span><ArrowIcon diagonal/></a>
             </article>
           ))}
         </div>

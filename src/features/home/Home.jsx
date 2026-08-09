@@ -7,7 +7,7 @@ import { listPathways } from '../../services/CareerPathwayService.js'
 import { useReveal } from '../../shared/hooks/useReveal.js'
 import { Button } from '../../shared/ui/Button.jsx'
 import { LogoMark } from '../../shared/ui/Logo.jsx'
-import { ArrowIcon, StatGlyph } from '../../shared/ui/icons.jsx'
+import { ArrowIcon, PathwayGlyph, StatGlyph } from '../../shared/ui/icons.jsx'
 import { AnnouncementCard } from './AnnouncementCard.jsx'
 import { OrbitalFuture } from './OrbitalFuture.jsx'
 import { VideoFeature } from './VideoFeature.jsx'
@@ -51,14 +51,14 @@ export function Home({ lang }) {
           <span className="eyebrow"><i/>{ui.missionEyebrow}</span>
           <h2>{ui.missionTitle}</h2>
           <p>{ui.missionText}</p>
-          <Button variant="outline">{ui.missionCta}</Button>
+          <Button variant="outline" to={ROUTE_PATHS.enablement}>{ui.missionCta}</Button>
         </div>
       </section>
 
       <section className="pathways-section section-shell" id="pathways">
-        <div className="section-heading"><div><span className="eyebrow"><i/>{ui.directionEyebrow}</span><h2>{ui.directionTitle}</h2></div><Button variant="text">{ui.directionCta}</Button></div>
+        <div className="section-heading"><div><span className="eyebrow"><i/>{ui.directionEyebrow}</span><h2>{ui.directionTitle}</h2></div><Button variant="text" to={ROUTE_PATHS.pathways}>{ui.directionCta}</Button></div>
         <div className="pathway-grid">
-          {pathways.map((path, index) => <a href="#" className="pathway-card" key={path.title} style={{'--card-tone': path.color}}><span>0{index + 1}</span><b>{path.mark}</b><div><h3>{lang === 'ar' ? path.arabicTitle : path.title}</h3><p>{lang === 'ar' ? path.arabicRole : path.role}</p></div><i><ArrowIcon diagonal/></i></a>)}
+          {pathways.map((path, index) => <a href={ROUTE_PATHS.pathways} onClick={(e) => { e.preventDefault(); navigate(ROUTE_PATHS.pathways); window.scrollTo(0, 0) }} className="pathway-card" key={path.title} style={{'--card-tone': path.color}}><span>0{index + 1}</span><b><PathwayGlyph type={path.id}/></b><div><h3>{lang === 'ar' ? path.arabicTitle : path.title}</h3><p>{lang === 'ar' ? path.arabicRole : path.role}</p></div><i><ArrowIcon diagonal/></i></a>)}
         </div>
       </section>
 
