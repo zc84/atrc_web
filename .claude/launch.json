@@ -3,8 +3,10 @@
   "configurations": [
     {
       "name": "atrc-web",
-      "port": 5173,
-      "url": "http://127.0.0.1:5173"
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 5001,
+      "url": "http://127.0.0.1:5001"
     }
   ]
 }

@@ -27,6 +27,14 @@ export function Home({ lang }) {
           <span className="eyebrow"><i/>{t.eyebrow}</span>
           <h1>{t.hero}</h1>
           <p>{t.intro}</p>
+          <div className="hero-proof" aria-label={ui.signalsEyebrow}>
+            {stats.map((stat) => (
+              <span key={stat.value}>
+                <strong>{stat.value}</strong>
+                <small>{lang === 'ar' ? stat.arabicSource : stat.source}</small>
+              </span>
+            ))}
+          </div>
           <div className="hero-ctas"><Button href="#pathways">{t.explorePath}</Button><Button variant="text" to={ROUTE_PATHS.technologies} onClick={() => window.scrollTo(0, 0)}>{t.discoverTech}</Button></div>
           <AnnouncementCard lang={lang} t={t} />
         </div>
