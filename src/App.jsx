@@ -214,7 +214,6 @@ function Home({ setRoute, lang }) {
           <AnnouncementCard lang={lang} t={t} />
         </div>
         <OrbitalFuture t={t} onOpen={() => {setRoute('technologies'); window.scrollTo(0,0)}} />
-        <div className="hero-foot"><span>SCROLL TO DISCOVER</span><i/></div>
       </section>
 
       <section className="signal-section section-shell">
@@ -298,9 +297,29 @@ function Technologies({ lang }) {
 function Footer({ setRoute }) {
   return (
     <footer className="site-footer section-shell">
-      <div className="footer-top"><Logo/><p>Talent. Technology.<br/>Transformation.</p><a href="https://www.atrc.gov.ae/" target="_blank" rel="noreferrer">Visit ATRC.gov.ae <ArrowIcon diagonal/></a></div>
-      <div className="footer-links"><div><small>EXPLORE</small><a href="#">Career Pathways</a><a href="/technologies" onClick={(e)=>{e.preventDefault();setRoute('technologies');window.scrollTo(0,0)}}>Advanced Technologies</a><a href="#">Talent Enablement</a></div><div><small>SUPPORT</small><a href="#">About</a><a href="#">Contact</a><a href="#">FAQ</a></div><div><small>LEGAL</small><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a></div></div>
-      <div className="footer-bottom"><span>© ATRC Talent Platform 2026</span><span>Abu Dhabi, United Arab Emirates</span></div>
+      <div className="footer-desktop">
+        <div className="footer-bar">
+          <Logo/>
+          <nav className="footer-essential-links" aria-label="Footer navigation">
+            <a href="#">Career Pathways</a>
+            <a href="/technologies" onClick={(e)=>{e.preventDefault();setRoute('technologies');window.scrollTo(0,0)}}>Technologies</a>
+            <a href="#">Opportunities</a>
+            <a href="#">Talent Enablement</a>
+          </nav>
+          <a className="footer-atrc-link" href="https://www.atrc.gov.ae/" target="_blank" rel="noreferrer"><span>ATRC ecosystem</span><i><ArrowIcon diagonal/></i></a>
+        </div>
+        <div className="footer-meta">
+          <span>© ATRC Talent Platform 2026</span>
+          <span>Abu Dhabi, United Arab Emirates</span>
+          <div><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a></div>
+        </div>
+      </div>
+
+      <div className="footer-mobile">
+        <div className="footer-top"><Logo/><p>Talent. Technology.<br/>Transformation.</p><a href="https://www.atrc.gov.ae/" target="_blank" rel="noreferrer">Visit ATRC.gov.ae <ArrowIcon diagonal/></a></div>
+        <div className="footer-links"><div><small>EXPLORE</small><a href="#">Career Pathways</a><a href="/technologies" onClick={(e)=>{e.preventDefault();setRoute('technologies');window.scrollTo(0,0)}}>Advanced Technologies</a><a href="#">Talent Enablement</a></div><div><small>SUPPORT</small><a href="#">About</a><a href="#">Contact</a><a href="#">FAQ</a></div><div><small>LEGAL</small><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a></div></div>
+        <div className="footer-bottom"><span>© ATRC Talent Platform 2026</span><span>Abu Dhabi, United Arab Emirates</span></div>
+      </div>
     </footer>
   )
 }
