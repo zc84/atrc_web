@@ -10,6 +10,15 @@ export function SearchIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
 }
 
+export function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/>
+      <path d="M10 5h4M10.5 18.5h3"/>
+    </svg>
+  )
+}
+
 export function TechGlyph({ type }) {
   const paths = {
     neural: <><circle cx="30" cy="23" r="5"/><circle cx="17" cy="40" r="4"/><circle cx="44" cy="42" r="4"/><path d="m26 27-7 10m15-10 8 11M21 40h19"/></>,
